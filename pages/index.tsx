@@ -1,7 +1,9 @@
+import { GetStaticProps } from "next";
+
 import Head from "next/head";
+
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { GetStaticProps } from "next";
 
 export default function Home() {
   const { t } = useTranslation("common");

@@ -1,13 +1,16 @@
-import { Button, GeistProvider, CssBaseline } from "@geist-ui/react";
-import type { AppProps } from "next/app";
-import { appWithTranslation } from "next-i18next";
 import { useState } from "react";
+
+import type { AppProps } from "next/app";
 import Link from "next/link";
+
+import { Button, GeistProvider, CssBaseline } from "@geist-ui/react";
+import { appWithTranslation } from "next-i18next";
 
 type theme = "dark" | "light";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [themeType, setThemeType] = useState<theme>("dark");
+
   const switchThemes = () => {
     setThemeType((last: theme) => (last === "dark" ? "light" : "dark"));
   };
@@ -37,10 +40,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Link>
 
         <Button
-          size="medium"
           auto
-          onClick={switchThemes}
+          size="medium"
           style={{ marginLeft: 10 }}
+          onClick={switchThemes}
         >
           {themeType === "dark" ? "🌙" : "🌞"}
         </Button>
@@ -50,4 +53,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </GeistProvider>
   );
 }
+
 export default appWithTranslation(MyApp);
