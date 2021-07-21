@@ -3,8 +3,6 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
-import Link from "next/link";
-
 export default function Home() {
   const { t } = useTranslation("common");
 
@@ -21,20 +19,6 @@ export default function Home() {
 
       <main>
         <p>{t("example")}</p>
-
-        <Link href="/" locale="pl">
-          <a>Switch to Polish</a>
-        </Link>
-
-        <br />
-
-        <Link href="/" locale="nb">
-          <a>Switch to Norwegian</a>
-        </Link>
-        <br />
-        <Link href="/" locale="en">
-          <a>Switch to English</a>
-        </Link>
       </main>
     </div>
   );
