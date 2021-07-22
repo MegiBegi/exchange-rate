@@ -24,6 +24,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
+        <script src="theme.ts" />
 
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
