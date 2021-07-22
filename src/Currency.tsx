@@ -11,12 +11,13 @@ import {
 
 import getSymbolFromCurrency from "currency-symbol-map";
 
+// Mocked data
+const rateDelta = 2;
+
 const CurrencyExchangeRateCard: FC<{
   name: string;
   value: number;
 }> = ({ name, value }) => {
-  const priceDelta = 2;
-
   return (
     <Box
       rounded="md"
@@ -35,12 +36,10 @@ const CurrencyExchangeRateCard: FC<{
           getSymbolFromCurrency(name) || ""
         }`}</StatNumber>
 
-        {priceDelta && Number(priceDelta) !== 0 && (
+        {rateDelta && Number(rateDelta) !== 0 && (
           <StatHelpText>
-            <StatArrow
-              type={Number(priceDelta) > 0 ? "increase" : "decrease"}
-            />
-            {priceDelta?.toLocaleString()}%
+            <StatArrow type={rateDelta > 0 ? "increase" : "decrease"} />
+            {rateDelta?.toLocaleString()}%
           </StatHelpText>
         )}
       </Stat>

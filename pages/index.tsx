@@ -1,3 +1,5 @@
+import { FC, useEffect } from "react";
+
 import { GetStaticProps } from "next";
 
 import Head from "next/head";
@@ -6,21 +8,50 @@ import Link from "next/link";
 import { TimeIcon } from "@chakra-ui/icons";
 import {
   Flex,
-  Box,
   Container,
   Text,
   Icon,
   Link as UILink,
+  Spinner,
 } from "@chakra-ui/react";
 
-import { mockedData } from "mockedData";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useQuery } from "react-query";
 
-import CurrencyExchangeRateCard from "src/currency/Currency";
+import CurrencyExchangeRateCard from "src/Currency";
 
-export default function Home() {
+type ExchangeData = {
+  base: string;
+  date: string;
+  provider: string;
+  rates: Record<string, number>;
+  terms: string;
+  time_last_updated: number;
+};
+
+type SSG = {
+  initialData: ExchangeData;
+};
+
+const Home: FC<SSG> = ({ initialData }) => {
   const { t } = useTranslation("common");
+
+  const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
+    "rates",
+    () =>
+      fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>
+        res.json()
+      ),
+    {
+      refetchInterval: 3000,
+      initialData,
+    }
+  );
+
+  useEffect(() => {
+    // toast(error.message)
+  }, [error]);
 
   return (
     <>
@@ -43,11 +74,19 @@ export default function Home() {
         px={{ base: 0, sm: 10 }}
       >
         <Flex alignItems="center" fontSize="md">
-          <Icon as={TimeIcon} mr="2" />
+          <Flex m={0} mr={2} w="16px" h="16px" p={0}>
+            {isLoading || isFetching ? (
+              <Spinner size="sm" colorScheme="gray" />
+            ) : (
+              <Icon as={TimeIcon} m={0} />
+            )}
+          </Flex>
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text h4>{new Date().toLocaleString()}</Text>
+          <Text h4>
+            {data && new Date(data.time_last_updated * 1000).toLocaleString()}
+          </Text>
         </Flex>
 
         <Flex fontSize="3xl">
@@ -68,7 +107,7 @@ export default function Home() {
       <main>
         <Container maxW="100%" px={35}>
           <Flex wrap="wrap" justifyContent="space-between">
-            <Box w="100%">
+            <Flex w="100%" alignItems="baseline">
               <Text
                 fontSize={{ base: "3xl", md: "6xl", sm: "4xl" }}
                 bg="linear-gradient(
@@ -83,32 +122,40 @@ export default function Home() {
               >
                 {t("compare_rates")}
               </Text>
-            </Box>
+            </Flex>
 
-            {Object.entries(mockedData).map(
-              ([symbol, rate]: [string, number]) => (
-                <CurrencyExchangeRateCard
-                  key={`rate-${symbol}`}
-                  name={symbol}
-                  value={rate}
-                />
-              )
-            )}
+            {data &&
+              Object.entries(data.rates).map(
+                ([symbol, rate]: [string, number]) => (
+                  <CurrencyExchangeRateCard
+                    key={`rate-${symbol}`}
+                    name={symbol}
+                    value={rate}
+                  />
+                )
+              )}
           </Flex>
         </Container>
       </main>
     </>
   );
-}
+};
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
   const intlProps = await serverSideTranslations(ctx.locale || "en", [
     "common",
   ]);
 
+  const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+  const data = await res.json();
+
   return {
     props: {
       ...intlProps,
+      initialData: data,
     },
+    revalidate: 10,
   };
 };
+
+export default Home;
