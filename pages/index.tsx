@@ -17,18 +17,16 @@ import {
 
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useQuery } from "react-query";
 
 import CurrencyExchangeRateCard from "src/Currency";
-
-type ExchangeData = {
-  base: string;
-  date: string;
-  provider: string;
-  rates: Record<string, number>;
-  terms: string;
-  time_last_updated: number;
-};
+import { useAppDispatch, useAppSelector } from "src/hooks";
+import {
+  loadRates,
+  selectIsRatesLoading,
+  selectLastUpdatedAt,
+  selectRates,
+} from "src/ratesSlice";
+import { ExchangeData } from "src/types";
 
 type SSG = {
   initialData: ExchangeData;
@@ -37,21 +35,21 @@ type SSG = {
 const Home: FC<SSG> = ({ initialData }) => {
   const { t } = useTranslation("common");
 
-  const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
-    "rates",
-    () =>
-      fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>
-        res.json()
-      ),
-    {
-      refetchInterval: 3000,
-      initialData,
-    }
-  );
+  const rates = useAppSelector(selectRates);
+  const isRatesLoading = useAppSelector(selectIsRatesLoading);
+  const lastUpdatedAt = useAppSelector(selectLastUpdatedAt);
+  const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   // toast(error.message)
+  // }, [error]);
 
   useEffect(() => {
-    // toast(error.message)
-  }, [error]);
+    dispatch(loadRates());
+  }, []);
+
+  const data = rates || initialData.rates;
+  const updatedAt = lastUpdatedAt || initialData.time_last_updated;
 
   return (
     <>
@@ -75,7 +73,7 @@ const Home: FC<SSG> = ({ initialData }) => {
       >
         <Flex alignItems="center" fontSize="md">
           <Flex m={0} mr={2} w="16px" h="16px" p={0}>
-            {isLoading || isFetching ? (
+            {isRatesLoading ? (
               <Spinner size="sm" colorScheme="gray" />
             ) : (
               <Icon as={TimeIcon} m={0} />
@@ -84,9 +82,7 @@ const Home: FC<SSG> = ({ initialData }) => {
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text h4>
-            {data && new Date(data.time_last_updated * 1000).toLocaleString()}
-          </Text>
+          <Text h4>{new Date(updatedAt * 1000).toLocaleString()}</Text>
         </Flex>
 
         <Flex fontSize="3xl">
@@ -124,16 +120,13 @@ const Home: FC<SSG> = ({ initialData }) => {
               </Text>
             </Flex>
 
-            {data &&
-              Object.entries(data.rates).map(
-                ([symbol, rate]: [string, number]) => (
-                  <CurrencyExchangeRateCard
-                    key={`rate-${symbol}`}
-                    name={symbol}
-                    value={rate}
-                  />
-                )
-              )}
+            {Object.entries(data).map(([symbol, rate]: [string, number]) => (
+              <CurrencyExchangeRateCard
+                key={`rate-${symbol}`}
+                name={symbol}
+                value={rate}
+              />
+            ))}
           </Flex>
         </Container>
       </main>
