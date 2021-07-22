@@ -1,26 +1,22 @@
 import Document, {
-  DocumentContext,
   Html,
+  Head,
   Main,
   NextScript,
-  Head,
+  DocumentContext,
 } from "next/document";
 
-import { CssBaseline } from "@geist-ui/react";
+import { ColorModeScript } from "@chakra-ui/react";
+
+import theme from "src/theme";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
-    const styles = CssBaseline.flush();
 
     return {
       ...initialProps,
-      styles: (
-        <>
-          {initialProps.styles}
-          {styles}
-        </>
-      ),
+      styles: <>{initialProps.styles}</>,
     };
   }
 
@@ -28,8 +24,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
+
         <body>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
           <Main />
+
           <NextScript />
         </body>
       </Html>

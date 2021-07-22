@@ -3,8 +3,16 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import { Grid, Text, Card } from "@geist-ui/react";
-import Clock from "@geist-ui/react-icons/clock";
+import { TimeIcon } from "@chakra-ui/icons";
+import {
+  Flex,
+  Box,
+  Container,
+  Text,
+  Icon,
+  Link as UILink,
+} from "@chakra-ui/react";
+
 import { mockedData } from "mockedData";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -25,68 +33,69 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          height: 50,
-          marginBottom: 50,
-          padding: "10px 20px",
-          fontSize: 30,
-        }}
+      <Flex
+        justifyContent={{ base: "center", sm: "space-between" }}
+        alignItems="center"
+        flexDir={{ base: "column-reverse", sm: "row" }}
+        h={{ base: "unset", sm: 50 }}
+        mb={{ base: 5, sm: 50 }}
+        py={{ base: 5, sm: 10 }}
+        px={{ base: 0, sm: 10 }}
       >
-        <Link href="/" locale="pl">
-          <a>🇵🇱</a>
-        </Link>
+        <Flex alignItems="center" fontSize="md">
+          <Icon as={TimeIcon} mr="2" />
 
-        <Link href="/" locale="nb">
-          <a style={{ marginLeft: 10 }}>🇳🇴</a>
-        </Link>
+          <Text mr="1">{t("last_updated_at")}</Text>
 
-        <Link href="/" locale="en">
-          <a style={{ marginLeft: 10 }}>🇺🇸</a>
-        </Link>
-      </header>
+          <Text h4>{new Date().toLocaleString()}</Text>
+        </Flex>
 
-      <main style={{ maxWidth: 1000, margin: "auto" }}>
-        <style jsx>{`
-          h1 {
-            background: linear-gradient(
-              90deg,
-              rgba(131, 58, 180, 1) 0%,
-              rgba(253, 29, 29, 1) 50%,
-              rgba(252, 176, 69, 1) 100%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          }
-        `}</style>
+        <Flex fontSize="3xl">
+          <Link href="/" locale="pl">
+            <UILink>🇵🇱</UILink>
+          </Link>
 
-        <Grid.Container gap={2} justify="space-between">
-          <Grid xs={12}>
-            <h1>{t("compare_rates")}</h1>
-          </Grid>
+          <Link href="/" locale="nb">
+            <UILink ml="2">🇳🇴</UILink>
+          </Link>
 
-          <Grid xs={12}>
-            <Card shadow>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Clock />
-                <Text style={{ marginLeft: 10 }}>{t("last_updated_at")}</Text>
-              </div>
+          <Link href="/" locale="en">
+            <UILink ml="2">🇺🇸</UILink>
+          </Link>
+        </Flex>
+      </Flex>
 
-              <Text h4>{new Date().toLocaleString()}</Text>
-            </Card>
-          </Grid>
+      <main>
+        <Container maxW="100%" px={35}>
+          <Flex wrap="wrap" justifyContent="space-between">
+            <Box w="100%">
+              <Text
+                fontSize={{ base: "3xl", md: "6xl", sm: "4xl" }}
+                bg="linear-gradient(
+                90deg,
+                rgba(131, 58, 180, 1) 0%,
+                rgba(253, 29, 29, 1) 50%,
+                rgba(252, 176, 69, 1) 100%
+              )"
+                bgClip="text"
+                fill="transparent"
+                textAlign={{ base: "center", sm: "left" }}
+              >
+                {t("compare_rates")}
+              </Text>
+            </Box>
 
-          {Object.entries(mockedData).map(
-            ([symbol, rate]: [string, number]) => (
-              <Grid xs={6} md={6} key={`currencySymbol-${symbol}`}>
-                <CurrencyExchangeRateCard name={symbol} value={rate} />
-              </Grid>
-            )
-          )}
-        </Grid.Container>
+            {Object.entries(mockedData).map(
+              ([symbol, rate]: [string, number]) => (
+                <CurrencyExchangeRateCard
+                  key={`rate-${symbol}`}
+                  name={symbol}
+                  value={rate}
+                />
+              )
+            )}
+          </Flex>
+        </Container>
       </main>
     </>
   );

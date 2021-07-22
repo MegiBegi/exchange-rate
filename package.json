@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@geist-ui/react": "^2.1.5",
-    "@geist-ui/react-icons": "^1.0.1",
+    "@chakra-ui/icons": "^1.0.14",
+    "@chakra-ui/react": "^1.6.5",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "currency-symbol-map": "^5.0.1",
+    "framer-motion": "^4",
     "next": "11.0.1",
     "next-i18next": "^8.5.5",
     "react": "17.0.2",

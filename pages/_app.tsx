@@ -1,28 +1,16 @@
 import type { AppProps } from "next/app";
 
-import { GeistProvider, CssBaseline } from "@geist-ui/react";
+import { ChakraProvider, Container } from "@chakra-ui/react";
+
 import { appWithTranslation } from "next-i18next";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <GeistProvider>
-      <CssBaseline />
-
-      <div
-        style={{
-          minHeight: "100vh",
-          overflow: "hidden",
-        }}
-      >
+    <ChakraProvider>
+      <Container maxW="100%" p={0} boxSizing="border-box">
         <Component {...pageProps} />
-
-        <style jsx global>{`
-          * {
-            box-sizing: border-box;
-          }
-        `}</style>
-      </div>
-    </GeistProvider>
+      </Container>
+    </ChakraProvider>
   );
 }
 
