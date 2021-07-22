@@ -1,55 +1,27 @@
-import { useState } from "react";
-
 import type { AppProps } from "next/app";
-import Link from "next/link";
 
-import { Button, GeistProvider, CssBaseline } from "@geist-ui/react";
+import { GeistProvider, CssBaseline } from "@geist-ui/react";
 import { appWithTranslation } from "next-i18next";
 
-type theme = "dark" | "light";
-
 function MyApp({ Component, pageProps }: AppProps) {
-  const [themeType, setThemeType] = useState<theme>("dark");
-
-  const switchThemes = () => {
-    setThemeType((last: theme) => (last === "dark" ? "light" : "dark"));
-  };
-
   return (
-    <GeistProvider themeType={themeType}>
+    <GeistProvider themeType={"light"}>
       <CssBaseline />
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          height: 50,
-          padding: "10px 20px",
-          fontSize: 30,
+          minHeight: "100vh",
+          overflow: "hidden",
         }}
       >
-        <Link href="/" locale="pl">
-          <a>🇵🇱</a>
-        </Link>
-        <Link href="/" locale="nb">
-          <a style={{ marginLeft: 10 }}>🇳🇴</a>
-        </Link>
-        <Link href="/" locale="en">
-          <a style={{ marginLeft: 10 }}>🇺🇸</a>
-        </Link>
+        <Component {...pageProps} />
 
-        <Button
-          auto
-          size="medium"
-          style={{ marginLeft: 10 }}
-          onClick={switchThemes}
-        >
-          {themeType === "dark" ? "🌙" : "🌞"}
-        </Button>
+        <style jsx global>{`
+          * {
+            box-sizing: border-box;
+          }
+        `}</style>
       </div>
-
-      <Component {...pageProps} />
     </GeistProvider>
   );
 }
