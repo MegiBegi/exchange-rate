@@ -50,9 +50,22 @@ export default function Home() {
       </header>
 
       <main style={{ maxWidth: 1000, margin: "auto" }}>
+        <style jsx>{`
+          h1 {
+            background: linear-gradient(
+              90deg,
+              rgba(131, 58, 180, 1) 0%,
+              rgba(253, 29, 29, 1) 50%,
+              rgba(252, 176, 69, 1) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        `}</style>
+
         <Grid.Container gap={2} justify="space-between">
           <Grid xs={12}>
-            <Text h1>{t("compare_rates")}</Text>
+            <h1>{t("compare_rates")}</h1>
           </Grid>
 
           <Grid xs={12}>
