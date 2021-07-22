@@ -1,4 +1,10 @@
-import Document, { DocumentContext } from "next/document";
+import Document, {
+  DocumentContext,
+  Html,
+  Main,
+  NextScript,
+  Head,
+} from "next/document";
 
 import { CssBaseline } from "@geist-ui/react";
 
@@ -16,6 +22,18 @@ class MyDocument extends Document {
         </>
       ),
     };
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
 

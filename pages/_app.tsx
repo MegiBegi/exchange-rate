@@ -5,7 +5,7 @@ import { appWithTranslation } from "next-i18next";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <GeistProvider themeType={"light"}>
+    <GeistProvider>
       <CssBaseline />
 
       <div
