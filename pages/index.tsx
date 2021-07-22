@@ -22,6 +22,7 @@ import CurrencyExchangeRateCard from "src/Currency";
 import { useAppDispatch, useAppSelector } from "src/hooks";
 import {
   loadRates,
+  pollRatesStart,
   selectIsRatesLoading,
   selectLastUpdatedAt,
   selectRates,
@@ -40,12 +41,14 @@ const Home: FC<SSG> = ({ initialData }) => {
   const lastUpdatedAt = useAppSelector(selectLastUpdatedAt);
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   // toast(error.message)
-  // }, [error]);
-
   useEffect(() => {
     dispatch(loadRates());
+  }, []);
+
+  useEffect(() => {
+    dispatch(pollRatesStart());
+
+    // TODO: find a way of cleaning the polling watcher up https://github.com/facebook/react/issues/14285
   }, []);
 
   const data = rates || initialData.rates;
@@ -82,7 +85,7 @@ const Home: FC<SSG> = ({ initialData }) => {
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text h4>{new Date(updatedAt * 1000).toLocaleString()}</Text>
+          <Text>{new Date(updatedAt * 1000).toLocaleString()}</Text>
         </Flex>
 
         <Flex fontSize="3xl">
