@@ -19,14 +19,14 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import CurrencyExchangeRateCard from "src/Currency";
-import { useAppDispatch, useAppSelector } from "src/hooks";
+import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
   loadRates,
   pollRatesStart,
   selectIsRatesLoading,
   selectLastUpdatedAt,
   selectRates,
-} from "src/ratesSlice";
+} from "src/store/ratesSlice";
 import { ExchangeData } from "src/types";
 
 type SSG = {

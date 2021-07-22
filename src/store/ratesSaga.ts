@@ -11,6 +11,7 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 
+import { ExchangeData } from "../types";
 import {
   loadRates,
   loadRatesError,
@@ -18,7 +19,6 @@ import {
   pollRatesStart,
   pollRatesStop,
 } from "./ratesSlice";
-import { ExchangeData } from "./types";
 
 const fetchRatesData = (): Promise<ExchangeData> =>
   fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>

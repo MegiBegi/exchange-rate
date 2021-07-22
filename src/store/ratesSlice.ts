@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { ExchangeData } from "../types";
 import { RootState } from "./store";
-import { ExchangeData } from "./types";
 
 interface RatesState {
   rates: Record<string, number> | null;
@@ -59,6 +59,7 @@ export const selectLastUpdatedAt = (state: RootState) => {
 };
 
 export const selectIsRatesLoading = (state: RootState) => state.isRatesLoading;
+// TODO: Add extra action so isRatesPolling is true only when fetching data in the polling-mode - show loader in the component
 export const selectIsRatesPolling = (state: RootState) => state.isRatesPolling;
 
 export default ratesSlice.reducer;
