@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import createSagaMiddleware from "redux-saga";
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import createSagaMiddleware from 'redux-saga';
 
-import ratesReducer from "src/store/ratesSlice";
+import ratesReducer from 'src/store/ratesSlice';
 
-import saga from "./ratesSaga";
+import saga from './ratesSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(

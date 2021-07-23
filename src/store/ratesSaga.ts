@@ -4,13 +4,13 @@ import {
   put,
   PutEffect,
   takeLatest,
-} from "redux-saga/effects";
+} from 'redux-saga/effects';
 
-import { ExchangeData } from "../types";
-import { loadRates, loadRatesError, loadRatesSuccess } from "./ratesSlice";
+import { ExchangeData } from '../types';
+import { loadRates, loadRatesError, loadRatesSuccess } from './ratesSlice';
 
 const fetchRatesData = (): Promise<ExchangeData> =>
-  fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>
+  fetch('https://api.exchangerate-api.com/v4/latest/USD').then((res) =>
     res.json()
   );
 

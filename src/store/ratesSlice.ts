@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ExchangeData } from "../types";
-import { RootState } from "./store";
+import { ExchangeData } from '../types';
+import { RootState } from './store';
 
 interface RatesState {
   rates: Record<string, number> | null;
@@ -16,7 +16,7 @@ const initialState: RatesState = {
 };
 
 export const ratesSlice = createSlice({
-  name: "rates",
+  name: 'rates',
   initialState,
   reducers: {
     loadRates: (state) => {
