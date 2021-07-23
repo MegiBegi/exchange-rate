@@ -4,11 +4,11 @@ import Document, {
   Main,
   NextScript,
   DocumentContext,
-} from "next/document";
+} from 'next/document';
 
-import { ColorModeScript } from "@chakra-ui/react";
+import { ColorModeScript } from '@chakra-ui/react';
 
-import theme from "public/theme";
+import theme from 'public/theme';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

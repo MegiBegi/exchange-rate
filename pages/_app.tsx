@@ -1,11 +1,11 @@
-import type { AppProps } from "next/app";
+import type { AppProps } from 'next/app';
 
-import { ChakraProvider, Container } from "@chakra-ui/react";
+import { ChakraProvider, Container } from '@chakra-ui/react';
 
-import { appWithTranslation } from "next-i18next";
-import { Provider } from "react-redux";
+import { appWithTranslation } from 'next-i18next';
+import { Provider } from 'react-redux';
 
-import store from "src/store/store";
+import store from 'src/store/store';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

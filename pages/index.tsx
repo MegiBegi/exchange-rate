@@ -1,11 +1,11 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect } from 'react';
 
-import { GetStaticProps } from "next";
+import { GetStaticProps } from 'next';
 
-import Head from "next/head";
-import Link from "next/link";
+import Head from 'next/head';
+import Link from 'next/link';
 
-import { TimeIcon } from "@chakra-ui/icons";
+import { TimeIcon } from '@chakra-ui/icons';
 import {
   Flex,
   Container,
@@ -13,21 +13,21 @@ import {
   Icon,
   Link as UILink,
   Spinner,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import CurrencyExchangeRateCard from "src/Currency";
-import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import CurrencyExchangeRateCard from 'src/Currency';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import {
   loadRates,
   selectIsRatesLoading,
   selectLastUpdatedAt,
   selectRates,
-} from "src/store/ratesSlice";
-import { ExchangeData, Locale } from "src/types";
-import { getTimeDisplayLocale } from "src/utils";
+} from 'src/store/ratesSlice';
+import { ExchangeData, Locale } from 'src/types';
+import { getTimeDisplayLocale } from 'src/utils';
 
 const RELOAD_RATES_INTERVAL = 3000; // ms
 
@@ -37,7 +37,7 @@ type SSG = {
 };
 
 const Home: FC<SSG> = ({ initialData, locale }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const dispatch = useAppDispatch();
 
   const rates = useAppSelector(selectRates);
@@ -67,10 +67,10 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
       </Head>
 
       <Flex
-        justifyContent={{ base: "center", sm: "space-between" }}
+        justifyContent={{ base: 'center', sm: 'space-between' }}
         alignItems="center"
-        flexDir={{ base: "column-reverse", sm: "row" }}
-        h={{ base: "unset", sm: 50 }}
+        flexDir={{ base: 'column-reverse', sm: 'row' }}
+        h={{ base: 'unset', sm: 50 }}
         mb={{ base: 5, sm: 50 }}
         py={{ base: 5, sm: 10 }}
         px={{ base: 0, sm: 10 }}
@@ -84,13 +84,13 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
             )}
           </Flex>
 
-          <Text mr="1">{t("last_updated_at")}</Text>
+          <Text mr="1">{t('last_updated_at')}</Text>
 
           <Text>
             {new Date(updatedAt * 1000).toLocaleString(
               getTimeDisplayLocale(locale),
               {
-                timeZone: "Europe/Oslo",
+                timeZone: 'Europe/Oslo',
               }
             )}
           </Text>
@@ -116,7 +116,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
           <Flex wrap="wrap" justifyContent="space-between">
             <Flex w="100%" alignItems="baseline">
               <Text
-                fontSize={{ base: "3xl", md: "6xl", sm: "4xl" }}
+                fontSize={{ base: '3xl', md: '6xl', sm: '4xl' }}
                 bg="linear-gradient(
                 90deg,
                 rgba(131, 58, 180, 1) 0%,
@@ -125,9 +125,9 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
               )"
                 bgClip="text"
                 fill="transparent"
-                textAlign={{ base: "center", sm: "left" }}
+                textAlign={{ base: 'center', sm: 'left' }}
               >
-                {t("compare_rates")}
+                {t('compare_rates')}
               </Text>
             </Flex>
 
@@ -148,10 +148,10 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 const REVALIDATE_RATES_INTERVAL = 10; // s
 
 export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
-  const locale = (ctx.locale as Locale) || "en";
-  const intlProps = await serverSideTranslations(locale, ["common"]);
+  const locale = (ctx.locale as Locale) || 'en';
+  const intlProps = await serverSideTranslations(locale, ['common']);
 
-  const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+  const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
   const data = await res.json();
 
   return {
