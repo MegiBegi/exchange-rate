@@ -87,7 +87,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 
           <Text>
             {new Date(updatedAt * 1000).toLocaleString(locale, {
-              timeZone: "GMT+2",
+              timeZone: "Europe/Oslo",
             })}
           </Text>
         </Flex>
