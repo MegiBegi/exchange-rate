@@ -85,7 +85,11 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text>{new Date(updatedAt * 1000).toLocaleString(locale)}</Text>
+          <Text>
+            {new Date(updatedAt * 1000).toLocaleString(locale, {
+              timeZone: "GMT+2",
+            })}
+          </Text>
         </Flex>
 
         <Flex fontSize="3xl">
