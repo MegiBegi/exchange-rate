@@ -20,6 +20,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useQuery } from "react-query";
 
 import CurrencyExchangeRateCard from "src/Currency";
+import { Locale } from "src/types";
+import { getTimeDisplayLocale } from "src/utils";
 
 type ExchangeData = {
   base: string;
@@ -32,7 +34,7 @@ type ExchangeData = {
 
 type SSG = {
   initialData: ExchangeData;
-  locale: string;
+  locale: Locale;
 };
 
 const Home: FC<SSG> = ({ initialData, locale }) => {
@@ -87,9 +89,12 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 
           <Text>
             {data &&
-              new Date(data.time_last_updated * 1000).toLocaleString(locale, {
-                timeZone: "Europe/Oslo",
-              })}
+              new Date(data.time_last_updated * 1000).toLocaleString(
+                getTimeDisplayLocale(locale),
+                {
+                  timeZone: "Europe/Oslo",
+                }
+              )}
           </Text>
         </Flex>
 
@@ -148,7 +153,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 const REVALIDATE_RATES_INTERVAL = 10; // s
 
 export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
-  const locale = ctx.locale || "en";
+  const locale = (ctx.locale as Locale) || "en";
   const intlProps = await serverSideTranslations(locale, ["common"]);
 
   const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
