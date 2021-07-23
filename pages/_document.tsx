@@ -8,7 +8,7 @@ import Document, {
 
 import { ColorModeScript } from "@chakra-ui/react";
 
-import theme from "src/theme";
+import theme from "public/theme";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
