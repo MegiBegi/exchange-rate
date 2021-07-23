@@ -21,8 +21,6 @@ import { useQuery } from "react-query";
 
 import CurrencyExchangeRateCard from "src/Currency";
 
-const REVALIDATE_RATES_INTERVAL = 10; // s
-
 type ExchangeData = {
   base: string;
   date: string;
@@ -34,10 +32,9 @@ type ExchangeData = {
 
 type SSG = {
   initialData: ExchangeData;
-  locale: string;
 };
 
-const Home: FC<SSG> = ({ initialData, locale }) => {
+const Home: FC<SSG> = ({ initialData }) => {
   const { t } = useTranslation("common");
 
   const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
@@ -88,8 +85,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
           <Text mr="1">{t("last_updated_at")}</Text>
 
           <Text>
-            {data &&
-              new Date(data.time_last_updated * 1000).toLocaleString(locale)}
+            {data && new Date(data.time_last_updated * 1000).toLocaleString()}
           </Text>
         </Flex>
 
@@ -145,6 +141,8 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
   );
 };
 
+const REVALIDATE_RATES_INTERVAL = 10; // s
+
 export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
   const locale = ctx.locale || "en";
   const intlProps = await serverSideTranslations(locale, ["common"]);
@@ -156,7 +154,6 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
     props: {
       ...intlProps,
       initialData: data,
-      locale,
     },
     revalidate: REVALIDATE_RATES_INTERVAL,
   };
