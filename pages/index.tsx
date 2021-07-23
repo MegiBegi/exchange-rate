@@ -34,9 +34,10 @@ type ExchangeData = {
 
 type SSG = {
   initialData: ExchangeData;
+  locale: string;
 };
 
-const Home: FC<SSG> = ({ initialData }) => {
+const Home: FC<SSG> = ({ initialData, locale }) => {
   const { t } = useTranslation("common");
 
   const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
@@ -87,7 +88,8 @@ const Home: FC<SSG> = ({ initialData }) => {
           <Text mr="1">{t("last_updated_at")}</Text>
 
           <Text>
-            {data && new Date(data.time_last_updated * 1000).toLocaleString()}
+            {data &&
+              new Date(data.time_last_updated * 1000).toLocaleString(locale)}
           </Text>
         </Flex>
 
@@ -144,9 +146,8 @@ const Home: FC<SSG> = ({ initialData }) => {
 };
 
 export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
-  const intlProps = await serverSideTranslations(ctx.locale || "en", [
-    "common",
-  ]);
+  const locale = ctx.locale || "en";
+  const intlProps = await serverSideTranslations(locale, ["common"]);
 
   const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
   const data = await res.json();
@@ -155,6 +156,7 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
     props: {
       ...intlProps,
       initialData: data,
+      locale,
     },
     revalidate: REVALIDATE_RATES_INTERVAL,
   };
