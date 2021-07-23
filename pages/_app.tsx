@@ -9,13 +9,13 @@ const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
         <Container maxW="100%" p={0} boxSizing="border-box">
           <Component {...pageProps} />
         </Container>
-      </QueryClientProvider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 }
 
