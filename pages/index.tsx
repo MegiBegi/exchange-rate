@@ -42,7 +42,7 @@ const Home: FC<SSG> = ({ initialData }) => {
   const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
     "rates",
     () =>
-      fetch("https://api.exchangerate-api.com/v4/late3st/USD").then((res) =>
+      fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>
         res.json()
       ),
     {
