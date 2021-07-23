@@ -17,20 +17,19 @@ import {
 
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useQuery } from 'react-query';
 
 import CurrencyExchangeRateCard from 'src/Currency';
-import { Locale } from 'src/types';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import {
+  loadRates,
+  selectIsRatesLoading,
+  selectLastUpdatedAt,
+  selectRates,
+} from 'src/store/ratesSlice';
+import { ExchangeData, Locale } from 'src/types';
 import { getTimeDisplayLocale } from 'src/utils';
 
-type ExchangeData = {
-  base: string;
-  date: string;
-  provider: string;
-  rates: Record<string, number>;
-  terms: string;
-  time_last_updated: number;
-};
+const RELOAD_RATES_INTERVAL = 3000; // ms
 
 type SSG = {
   initialData: ExchangeData;
@@ -39,22 +38,22 @@ type SSG = {
 
 const Home: FC<SSG> = ({ initialData, locale }) => {
   const { t } = useTranslation('common');
+  const dispatch = useAppDispatch();
 
-  const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
-    'rates',
-    () =>
-      fetch('https://api.exchangerate-api.com/v4/latest/USD').then((res) =>
-        res.json()
-      ),
-    {
-      refetchInterval: 3000,
-      initialData,
-    }
-  );
+  const rates = useAppSelector(selectRates);
+  const isRatesLoading = useAppSelector(selectIsRatesLoading);
+  const lastUpdatedAt = useAppSelector(selectLastUpdatedAt);
 
   useEffect(() => {
-    // toast(error.message)
-  }, [error]);
+    const pollIntervalId = setInterval(() => {
+      dispatch(loadRates());
+    }, RELOAD_RATES_INTERVAL);
+
+    return () => clearInterval(pollIntervalId);
+  }, []);
+
+  const data = rates || initialData.rates;
+  const updatedAt = lastUpdatedAt || initialData.time_last_updated;
 
   return (
     <>
@@ -78,7 +77,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
       >
         <Flex alignItems="center" fontSize="md">
           <Flex m={0} mr={2} w="16px" h="16px" p={0}>
-            {isLoading || isFetching ? (
+            {isRatesLoading ? (
               <Spinner size="sm" colorScheme="gray" />
             ) : (
               <Icon as={TimeIcon} m={0} />
@@ -88,13 +87,12 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
           <Text mr="1">{t('last_updated_at')}</Text>
 
           <Text>
-            {data &&
-              new Date(data.time_last_updated * 1000).toLocaleString(
-                getTimeDisplayLocale(locale),
-                {
-                  timeZone: 'Europe/Oslo',
-                }
-              )}
+            {new Date(updatedAt * 1000).toLocaleString(
+              getTimeDisplayLocale(locale),
+              {
+                timeZone: 'Europe/Oslo',
+              }
+            )}
           </Text>
         </Flex>
 
@@ -133,16 +131,13 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
               </Text>
             </Flex>
 
-            {data &&
-              Object.entries(data.rates).map(
-                ([symbol, rate]: [string, number]) => (
-                  <CurrencyExchangeRateCard
-                    key={`rate-${symbol}`}
-                    name={symbol}
-                    value={rate}
-                  />
-                )
-              )}
+            {Object.entries(data).map(([symbol, rate]: [string, number]) => (
+              <CurrencyExchangeRateCard
+                key={`rate-${symbol}`}
+                name={symbol}
+                value={rate}
+              />
+            ))}
           </Flex>
         </Container>
       </main>
