@@ -6,7 +6,6 @@ import { RootState } from "./store";
 interface RatesState {
   rates: Record<string, number> | null;
   isRatesLoading: boolean;
-  isRatesPolling: boolean;
   lastUpdatedAt: number | null;
 }
 
@@ -14,7 +13,6 @@ const initialState: RatesState = {
   rates: null,
   lastUpdatedAt: null,
   isRatesLoading: false,
-  isRatesPolling: false,
 };
 
 export const ratesSlice = createSlice({
@@ -33,22 +31,11 @@ export const ratesSlice = createSlice({
     loadRatesError: (state) => {
       state.isRatesLoading = false;
     },
-    pollRatesStart: (state) => {
-      state.isRatesPolling = true;
-    },
-    pollRatesStop: (state) => {
-      state.isRatesPolling = false;
-    },
   },
 });
 
-export const {
-  loadRates,
-  loadRatesSuccess,
-  loadRatesError,
-  pollRatesStart,
-  pollRatesStop,
-} = ratesSlice.actions;
+export const { loadRates, loadRatesSuccess, loadRatesError } =
+  ratesSlice.actions;
 
 export const selectRates = (state: RootState) => {
   return state.rates;
@@ -59,7 +46,5 @@ export const selectLastUpdatedAt = (state: RootState) => {
 };
 
 export const selectIsRatesLoading = (state: RootState) => state.isRatesLoading;
-// TODO: Add extra action so isRatesPolling is true only when fetching data in the polling-mode - show loader in the component
-export const selectIsRatesPolling = (state: RootState) => state.isRatesPolling;
 
 export default ratesSlice.reducer;

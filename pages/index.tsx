@@ -22,12 +22,14 @@ import CurrencyExchangeRateCard from "src/Currency";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import {
   loadRates,
-  pollRatesStart,
   selectIsRatesLoading,
   selectLastUpdatedAt,
   selectRates,
 } from "src/store/ratesSlice";
 import { ExchangeData } from "src/types";
+
+const RELOAD_RATES_INTERVAL = 3000; // ms
+const REVALIDATE_RATES_INTERVAL = 10; // s
 
 type SSG = {
   initialData: ExchangeData;
@@ -42,13 +44,11 @@ const Home: FC<SSG> = ({ initialData }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(loadRates());
-  }, []);
+    const pollIntervalId = setInterval(() => {
+      dispatch(loadRates());
+    }, RELOAD_RATES_INTERVAL);
 
-  useEffect(() => {
-    dispatch(pollRatesStart());
-
-    // TODO: find a way of cleaning the polling watcher up https://github.com/facebook/react/issues/14285
+    return () => clearInterval(pollIntervalId);
   }, []);
 
   const data = rates || initialData.rates;
@@ -150,7 +150,7 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
       ...intlProps,
       initialData: data,
     },
-    revalidate: 10,
+    revalidate: REVALIDATE_RATES_INTERVAL,
   };
 };
 
