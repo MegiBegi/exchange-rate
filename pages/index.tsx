@@ -32,9 +32,10 @@ const RELOAD_RATES_INTERVAL = 3000; // ms
 
 type SSG = {
   initialData: ExchangeData;
+  locale: string;
 };
 
-const Home: FC<SSG> = ({ initialData }) => {
+const Home: FC<SSG> = ({ initialData, locale }) => {
   const { t } = useTranslation("common");
   const dispatch = useAppDispatch();
 
@@ -84,7 +85,7 @@ const Home: FC<SSG> = ({ initialData }) => {
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text>{new Date(updatedAt * 1000).toLocaleString()}</Text>
+          <Text>{new Date(updatedAt * 1000).toLocaleString(locale)}</Text>
         </Flex>
 
         <Flex fontSize="3xl">
@@ -148,6 +149,7 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
   return {
     props: {
       ...intlProps,
+      locale,
       initialData: data,
     },
     revalidate: REVALIDATE_RATES_INTERVAL,
