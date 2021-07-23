@@ -37,11 +37,11 @@ type SSG = {
 
 const Home: FC<SSG> = ({ initialData }) => {
   const { t } = useTranslation("common");
+  const dispatch = useAppDispatch();
 
   const rates = useAppSelector(selectRates);
   const isRatesLoading = useAppSelector(selectIsRatesLoading);
   const lastUpdatedAt = useAppSelector(selectLastUpdatedAt);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const pollIntervalId = setInterval(() => {

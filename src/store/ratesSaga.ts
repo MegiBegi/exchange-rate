@@ -17,11 +17,7 @@ const fetchRatesData = (): Promise<ExchangeData> =>
 function* fetchRates(): Generator<
   | CallEffect<ExchangeData>
   | PutEffect<{
-      payload: ExchangeData;
-      type: string;
-    }>
-  | PutEffect<{
-      payload: undefined;
+      payload: ExchangeData | undefined;
       type: string;
     }>,
   void,

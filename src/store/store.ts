@@ -4,7 +4,7 @@ import createSagaMiddleware from "redux-saga";
 
 import ratesReducer from "src/store/ratesSlice";
 
-import mySaga from "./ratesSaga";
+import saga from "./ratesSaga";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -12,7 +12,7 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 
-sagaMiddleware.run(mySaga);
+sagaMiddleware.run(saga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
