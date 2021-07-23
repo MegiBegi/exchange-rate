@@ -1,10 +1,10 @@
-import type { AppProps } from "next/app";
+import type { AppProps } from 'next/app';
 
-import { ChakraProvider, Container } from "@chakra-ui/react";
+import { ChakraProvider, Container } from '@chakra-ui/react';
 
-import { appWithTranslation } from "next-i18next";
-import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { appWithTranslation } from 'next-i18next';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 

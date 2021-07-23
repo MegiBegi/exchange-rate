@@ -1,9 +1,9 @@
-import { Locale } from "./types";
+import { Locale } from './types';
 
 const configLocales = {
-  no: "nb-NO",
-  pl: "pl-PL",
-  en: "en-US",
+  no: 'nb-NO',
+  pl: 'pl-PL',
+  en: 'en-US',
 };
 
 export const getTimeDisplayLocale = (locale: Locale): string =>
