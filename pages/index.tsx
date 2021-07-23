@@ -21,6 +21,8 @@ import { useQuery } from "react-query";
 
 import CurrencyExchangeRateCard from "src/Currency";
 
+const REVALIDATE_RATES_INTERVAL = 10; // s
+
 type ExchangeData = {
   base: string;
   date: string;
@@ -40,7 +42,7 @@ const Home: FC<SSG> = ({ initialData }) => {
   const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
     "rates",
     () =>
-      fetch("https://api.exchangerate-api.com/v4/latest/USD").then((res) =>
+      fetch("https://api.exchangerate-api.com/v4/late3st/USD").then((res) =>
         res.json()
       ),
     {
@@ -84,7 +86,7 @@ const Home: FC<SSG> = ({ initialData }) => {
 
           <Text mr="1">{t("last_updated_at")}</Text>
 
-          <Text h4>
+          <Text>
             {data && new Date(data.time_last_updated * 1000).toLocaleString()}
           </Text>
         </Flex>
@@ -154,7 +156,7 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
       ...intlProps,
       initialData: data,
     },
-    revalidate: 10,
+    revalidate: REVALIDATE_RATES_INTERVAL,
   };
 };
 
