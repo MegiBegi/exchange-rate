@@ -32,9 +32,10 @@ type ExchangeData = {
 
 type SSG = {
   initialData: ExchangeData;
+  locale: string;
 };
 
-const Home: FC<SSG> = ({ initialData }) => {
+const Home: FC<SSG> = ({ initialData, locale }) => {
   const { t } = useTranslation("common");
 
   const { data, error, isLoading, isFetching } = useQuery<ExchangeData>(
@@ -85,7 +86,10 @@ const Home: FC<SSG> = ({ initialData }) => {
           <Text mr="1">{t("last_updated_at")}</Text>
 
           <Text>
-            {data && new Date(data.time_last_updated * 1000).toLocaleString()}
+            {data &&
+              new Date(data.time_last_updated * 1000).toLocaleString(locale, {
+                timeZone: "Europe/Oslo",
+              })}
           </Text>
         </Flex>
 
@@ -154,6 +158,7 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
     props: {
       ...intlProps,
       initialData: data,
+      locale,
     },
     revalidate: REVALIDATE_RATES_INTERVAL,
   };
