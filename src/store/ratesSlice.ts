@@ -5,8 +5,8 @@ import { RootState } from "./store";
 
 interface RatesState {
   rates: Record<string, number> | null;
-  isRatesLoading: boolean;
   lastUpdatedAt: number | null;
+  isRatesLoading: boolean;
 }
 
 const initialState: RatesState = {
@@ -37,14 +37,8 @@ export const ratesSlice = createSlice({
 export const { loadRates, loadRatesSuccess, loadRatesError } =
   ratesSlice.actions;
 
-export const selectRates = (state: RootState) => {
-  return state.rates;
-};
-
-export const selectLastUpdatedAt = (state: RootState) => {
-  return state.lastUpdatedAt;
-};
-
+export const selectRates = (state: RootState) => state.rates;
+export const selectLastUpdatedAt = (state: RootState) => state.lastUpdatedAt;
 export const selectIsRatesLoading = (state: RootState) => state.isRatesLoading;
 
 export default ratesSlice.reducer;
