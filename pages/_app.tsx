@@ -4,6 +4,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 
 import { appWithTranslation } from "next-i18next";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Container>
       </ChakraProvider>
+
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
