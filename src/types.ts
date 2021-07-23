@@ -1,3 +1,5 @@
+export type Locale = "no" | "pl" | "en";
+
 export type ExchangeData = {
   base: string;
   date: string;

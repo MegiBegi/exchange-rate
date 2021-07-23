@@ -26,13 +26,14 @@ import {
   selectLastUpdatedAt,
   selectRates,
 } from "src/store/ratesSlice";
-import { ExchangeData } from "src/types";
+import { ExchangeData, Locale } from "src/types";
+import { getTimeDisplayLocale } from "src/utils";
 
 const RELOAD_RATES_INTERVAL = 3000; // ms
 
 type SSG = {
   initialData: ExchangeData;
-  locale: string;
+  locale: Locale;
 };
 
 const Home: FC<SSG> = ({ initialData, locale }) => {
@@ -86,9 +87,12 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
           <Text mr="1">{t("last_updated_at")}</Text>
 
           <Text>
-            {new Date(updatedAt * 1000).toLocaleString(locale, {
-              timeZone: "Europe/Oslo",
-            })}
+            {new Date(updatedAt * 1000).toLocaleString(
+              getTimeDisplayLocale(locale),
+              {
+                timeZone: "Europe/Oslo",
+              }
+            )}
           </Text>
         </Flex>
 
@@ -144,7 +148,7 @@ const Home: FC<SSG> = ({ initialData, locale }) => {
 const REVALIDATE_RATES_INTERVAL = 10; // s
 
 export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
-  const locale = ctx.locale || "en";
+  const locale = (ctx.locale as Locale) || "en";
   const intlProps = await serverSideTranslations(locale, ["common"]);
 
   const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
@@ -153,8 +157,8 @@ export const getStaticProps: GetStaticProps<SSG> = async (ctx) => {
   return {
     props: {
       ...intlProps,
-      locale,
       initialData: data,
+      locale,
     },
     revalidate: REVALIDATE_RATES_INTERVAL,
   };
